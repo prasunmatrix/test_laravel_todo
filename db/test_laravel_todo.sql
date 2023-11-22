@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 25, 2023 at 04:59 PM
+-- Generation Time: Nov 22, 2023 at 06:24 AM
 -- Server version: 10.4.20-MariaDB
 -- PHP Version: 7.3.29
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `matrixmedia_db_epaper`
+-- Database: `test_laravel_todo`
 --
 
 -- --------------------------------------------------------
@@ -61,70 +61,22 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `news`
---
-
-CREATE TABLE `news` (
-  `id` int(11) NOT NULL,
-  `news_date` date NOT NULL,
-  `slot` enum('M','E') NOT NULL COMMENT 'M=>Morning,E=>Evening\r\n',
-  `published` tinyint(1) NOT NULL DEFAULT 0 COMMENT '1=>published,0=>unpublished\r\n',
-  `created_by` int(11) NOT NULL COMMENT 'Primary key of users table\r\n',
-  `status` tinyint(1) NOT NULL DEFAULT 1 COMMENT '1=Actve,0=Inactive\r\n',
-  `is_deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0=Not deleted,1=deleted\r\n',
-  `deleted_by` int(11) NOT NULL DEFAULT 0,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `pages`
---
-
-CREATE TABLE `pages` (
-  `id` int(11) NOT NULL,
-  `news_id` int(11) NOT NULL COMMENT 'primary key of news table\r\n',
-  `Page_number` int(11) NOT NULL,
-  `Page_add_date` date NOT NULL,
-  `template` text NOT NULL,
-  `created_by` int(11) NOT NULL COMMENT 'Primary key of users table\r\n',
-  `status` tinyint(1) NOT NULL DEFAULT 1 COMMENT '1=Active,0=Inactive',
-  `is_deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0=Not deleted,1=deleted\r\n',
-  `deleted_by` int(11) NOT NULL DEFAULT 0,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `pages_bkp25may2023`
---
-
-CREATE TABLE `pages_bkp25may2023` (
-  `id` int(11) NOT NULL,
-  `news_id` int(11) NOT NULL COMMENT 'primary key of news table\r\n',
-  `template_id` int(11) NOT NULL COMMENT 'Primary key of template table\r\n',
-  `Page_number` int(11) NOT NULL,
-  `Page_add_date` date NOT NULL,
-  `image` varchar(255) NOT NULL,
-  `created_by` int(11) NOT NULL COMMENT 'Primary key of users table\r\n',
-  `status` tinyint(1) NOT NULL DEFAULT 1 COMMENT '1=Active,0=Inactive',
-  `is_deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0=Not deleted,1=deleted\r\n',
-  `deleted_by` int(11) NOT NULL DEFAULT 0,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `password_resets`
 --
 
 CREATE TABLE `password_resets` (
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `password_resets_bkp08jun2023`
+--
+
+CREATE TABLE `password_resets_bkp08jun2023` (
   `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL
@@ -133,20 +85,28 @@ CREATE TABLE `password_resets` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `templates_bkp25may2023`
+-- Table structure for table `todo`
 --
 
-CREATE TABLE `templates_bkp25may2023` (
+CREATE TABLE `todo` (
   `id` int(11) NOT NULL,
-  `template_name` varchar(255) NOT NULL,
-  `number_of_image_fit_template` int(11) NOT NULL,
-  `created_by` int(11) NOT NULL COMMENT 'Primary key of users table\r\n',
-  `status` tinyint(1) NOT NULL DEFAULT 1 COMMENT '1=Active,0=Inactive\r\n',
-  `is_deleted` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0=Not deleted,1=deleted\r\n',
-  `deleted_by` int(11) NOT NULL DEFAULT 0,
+  `user_id` int(11) NOT NULL COMMENT 'Primary key of user table',
+  `task_name` varchar(255) NOT NULL,
+  `task_description` text NOT NULL,
+  `complete` tinyint(1) NOT NULL DEFAULT 0 COMMENT '1=>mark as complete,0=>mark as incomplete	',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `todo`
+--
+
+INSERT INTO `todo` (`id`, `user_id`, `task_name`, `task_description`, `complete`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 1, 'Test Todo', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s,', 1, '2023-11-21 10:09:11', '2023-11-21 22:46:02', NULL),
+(2, 1, 'Todo 2', 'It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.', 0, '2023-11-21 22:45:11', '2023-11-21 22:45:11', NULL),
+(3, 2, 'Test todo55', 'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC...test 44', 1, '2023-11-21 22:49:58', '2023-11-21 22:51:30', NULL);
 
 -- --------------------------------------------------------
 
@@ -160,18 +120,22 @@ CREATE TABLE `users` (
   `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
   `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` enum('A','I','D') COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'A-active, I-Inactive, D-Delete',
+  `status` enum('A','I') COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'A-active, I-Inactive, D-Delete',
   `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `status`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Admin User', 'admin@admin.com', NULL, '$2y$10$IZPjsS/VG8uWhza8MTIqme3EdUuIdVOeDge6bG6T1hEdxMvqvUGSy', 'A', NULL, '2023-05-25 05:27:22', '2023-05-25 05:27:22');
+INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `status`, `remember_token`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'Admin User', 'admin@gmail.com', NULL, '$2y$10$DojmHDuPp0Nd9jhu93VLruL6Tr/ZDUES3dAiyKXL4uTOqyAMUd8be', 'A', NULL, '2023-05-25 05:27:22', '2023-11-21 22:43:50', NULL),
+(2, 'Test User', 'testuser@gmail.com', NULL, '$2y$10$188U9phj.1H/2GVh8znzReSTXHoaRma8YKE147So2KT0/b.0.hK.C', 'A', NULL, '2023-05-29 23:28:08', '2023-11-21 11:11:01', NULL),
+(3, 'Test User1234', 'testuser1234@gmail.com', NULL, '$2y$10$BWjXzj/IlcIHnZZmG/7Nsu5t5FyYcPV..CL3ITdz5MnksJsgBu5LC', 'A', NULL, '2023-06-08 00:25:34', '2023-06-08 00:25:34', NULL),
+(4, 'Test Raju', 'testraju@gmail.com', NULL, '$2y$10$xXnSwYKj4tpYp77HCKYgKeFGy/pVH6CFRYH7DQTZfN7Z0e5TdHmPu', 'A', NULL, '2023-11-21 08:11:48', '2023-11-21 10:55:32', NULL);
 
 -- --------------------------------------------------------
 
@@ -215,33 +179,21 @@ ALTER TABLE `migrations`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `news`
---
-ALTER TABLE `news`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `pages`
---
-ALTER TABLE `pages`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `pages_bkp25may2023`
---
-ALTER TABLE `pages_bkp25may2023`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `password_resets`
 --
 ALTER TABLE `password_resets`
   ADD KEY `password_resets_email_index` (`email`);
 
 --
--- Indexes for table `templates_bkp25may2023`
+-- Indexes for table `password_resets_bkp08jun2023`
 --
-ALTER TABLE `templates_bkp25may2023`
+ALTER TABLE `password_resets_bkp08jun2023`
+  ADD KEY `password_resets_email_index` (`email`);
+
+--
+-- Indexes for table `todo`
+--
+ALTER TABLE `todo`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -275,34 +227,16 @@ ALTER TABLE `migrations`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `news`
+-- AUTO_INCREMENT for table `todo`
 --
-ALTER TABLE `news`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `pages`
---
-ALTER TABLE `pages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `pages_bkp25may2023`
---
-ALTER TABLE `pages_bkp25may2023`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `templates_bkp25may2023`
---
-ALTER TABLE `templates_bkp25may2023`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `todo`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `users_bkp25may2023`
